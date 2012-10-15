@@ -1,4 +1,5 @@
-(ns spam.core)
+(ns spam.core
+  (:use [clojure.math.numeric-tower]))
 
 (def max-ham-score 0.4)
 (def min-spam-score 0.6)
@@ -100,14 +101,17 @@
   (min
    1
    (let [m (/ value 2.0)
-         s (Math/exp (* -1 m))
+         s (Math/exp (* -1.0 m))
          t s]
      (loop [i 1
-            sum s]
-       (if (> i (/ degrees-of-freedom 2))
+            sum s
+            t (* t (/ m i))]
+       (if (>= i (/ degrees-of-freedom 2))
          sum
-         (recur (inc i) (+ sum (/ (Math/pow m i) (factorial i))))))
-     )))
+         (recur
+          (inc i)
+          (+ sum t)
+          (* t (/ m (inc i)))))))))
 
 (defn fisher [probs
               number-of-probs]
