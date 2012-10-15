@@ -4,10 +4,6 @@
 (def max-ham-score 0.4)
 (def min-spam-score 0.6)
 
-(defn classify [text]
-  ;(classification (score (extract-features text)))
-  )
-
 (defn classification [score]
   (cond
     (<= score max-ham-score) :ham
